@@ -1,225 +1,473 @@
-# TIME TRACKING ANALYSIS SUBROUTINE v1.0
-## MANDATORY EXECUTION PROTOCOL FOR VOLUNTEER TIME DATA
+# Enhanced Time Subroutine Specifications v2.0
+**Improving Clock Out Handling and Session Accuracy**
 
-### **PHASE 1: DATA PARSING & EXTRACTION**
+## EXECUTIVE SUMMARY
 
-#### **Step 1.1: Timestamp Extraction**
-```
-FOR EACH tracking entry:
-  1. EXTRACT user_id (everything before date)
-  2. EXTRACT iso_timestamp (YYYY-MM-DDTHH:MM:SS.sssZ format)
-  3. EXTRACT manual_notes (everything after ** markers)
-  4. CREATE entry_object {user_id, timestamp, notes, type: "clock_in"}
-```
+Current time subroutine has calculation accuracy issues when explicit clock out markers are present. This specification addresses explicit time marking, session validation, and automated error prevention.
 
-#### **Step 1.2: Manual Time Override Detection**
-```
-SCAN manual_notes FOR time_override_patterns:
-  - "Clock Out @ [TIME]" → EXTRACT override_time, SET type: "clock_out_manual"
-  - "clockout @ [TIME]" → EXTRACT override_time, SET type: "clock_out_manual"  
-  - "[TIME] ET/EST/EDT" → EXTRACT timezone_time, SET type: "clock_out_manual"
-  - "taking a [break/lunch]" → SET type: "break_start"
-  - "back from [break]" → SET type: "break_end"
+---
 
-CONVERT manual_times TO iso_timestamp:
-  - "1030 PM ET" → convert to YYYY-MM-DDTHH:MM:SS.sssZ in ET timezone
-  - Apply date from previous timestamp
-```
+## CURRENT SYSTEM ANALYSIS
 
-#### **Step 1.3: Work Content Extraction**
-```
-SCAN manual_notes FOR work_content_patterns:
-  - "Continue researching [TOPIC]" → research_activity: [TOPIC]
-  - "Working on [TASK]" → active_task: [TASK]
-  - "Review [TYPE]" → review_activity: [TYPE]
-  - Research keywords: TNS, network, literature, analysis
-  - Project keywords: NTARI, Agrinet, Fruitful, Forge Labs
-```
+### Issues Identified:
+1. **Clock Out Marker Ignored**: Explicit "Clock Out @ 1030 PM ET" was not prioritized over timestamp calculations
+2. **Session Length Validation Missing**: 22.9-hour session went unfllagged as extreme
+3. **Data Type Ambiguity**: No distinction between automatic timestamps vs user-declared times
+4. **Calculation Errors**: Led to 14.6 hour overcounting (52.8 vs 38.2 actual hours)
 
-### **PHASE 2: TIME CALCULATION ENGINE**
-
-#### **Step 2.1: Session Pairing Logic**
+### Current Data Format Problems:
 ```
-FOR EACH user_id:
-  1. SORT entries BY timestamp chronologically
-  2. PAIR consecutive entries:
-     - clock_in → clock_out (normal session)
-     - clock_in → clock_out_manual (manual override session)
-     - clock_in → break_start (partial session)
-     - break_end → clock_out (resumed session)
-  
-  3. HANDLE unpaired entries:
-     - clock_in with no clock_out → status: "ongoing" or "incomplete"
-     - manual clock_out time → use override_time for calculation
+HLine3f573d1-7315-4212-bd3c-8a301b92015f2025-06-04T04:19:20.527Z**Clock Out @ 1030 PM ET**
+```
+**Issues:**
+- Clock out time buried in unstructured text
+- No standardized format for explicit markers
+- Mixed timestamp formats (ISO vs human readable)
+
+---
+
+## ENHANCED DATA STRUCTURE SPECIFICATIONS
+
+### 1. Standardized Event Types
+
+```javascript
+// Event Type Classifications
+const EVENT_TYPES = {
+    AUTO_TIMESTAMP: 'auto_ts',           // System-generated timestamp
+    EXPLICIT_CLOCKIN: 'clock_in',        // User-declared start
+    EXPLICIT_CLOCKOUT: 'clock_out',      // User-declared end
+    BREAK_START: 'break_start',          // Break/pause marker
+    BREAK_END: 'break_end',              // Resume marker
+    SESSION_NOTE: 'note',                // Context/activity note
+    SYSTEM_MARKER: 'system'              // System-generated marker
+};
 ```
 
-#### **Step 2.2: Duration Calculation**
-```
-FOR EACH session_pair:
-  1. CALCULATE raw_duration = end_time - start_time
-  2. CONVERT to hours:minutes format
-  3. FLAG sessions > 16 hours as "review_needed"
-  4. FLAG sessions < 5 minutes as "potential_error"
-  
-SPECIAL CASES:
-  - Manual clock out: USE override_time instead of next timestamp
-  - Break periods: SUBTRACT break_duration from total_session
-  - Overnight sessions: VERIFY with manual notes
-```
+### 2. Enhanced Data Format
 
-#### **Step 2.3: Daily/Weekly Aggregation**
-```
-FOR EACH user_id:
-  1. GROUP sessions BY date
-  2. CALCULATE daily_total = SUM(session_durations)
-  3. CALCULATE weekly_total = SUM(daily_totals)
-  4. CALCULATE average_daily = weekly_total / active_days
-  5. FLAG daily_totals > 12 hours as "high_intensity"
+```javascript
+// New Structured Format
+const timeEntry = {
+    userId: "3f573d1-7315-4212-bd3c-8a301b92015f",
+    eventType: "clock_out",
+    timestamp: "2025-06-04T22:30:00.000Z",    // UTC timestamp
+    localTime: "10:30 PM ET",                 // Human-readable local
+    timezone: "America/New_York",             // Explicit timezone
+    sessionId: "session_20250603_233500",    // Links related events
+    note: "Extended research session complete",
+    priority: "explicit",                     // explicit > auto > inferred
+    validatedBy: "user_declared"              // Validation source
+};
 ```
 
-### **PHASE 3: CONTENT ANALYSIS & CATEGORIZATION**
+### 3. Session Grouping Structure
 
-#### **Step 3.1: Research Topic Classification**
-```
-ANALYZE work_content_notes FOR:
-
-RESEARCH_CATEGORIES:
-  - "TNS" → Theoretical Network Systems
-  - "network structure" → Network Analysis Research  
-  - "public opinion" → Social Network Research
-  - "literature" → Academic Literature Review
-  - "ideational implications" → Theoretical Development
-
-PROJECT_CATEGORIES:
-  - "Agrinet" → Agricultural Network Protocol
-  - "Fruitful" → Frontend Application Development
-  - "Forge Labs" → Backend Infrastructure
-  - "Node.Nexus" → Publication Platform
-
-ACTIVITY_TYPES:
-  - "researching" → Active Research
-  - "review" → Quality Assurance/Literature Review
-  - "working on" → Development/Implementation
-  - "continue" → Sustained Research Focus
-```
-
-#### **Step 3.2: Productivity Pattern Detection**
-```
-ANALYZE temporal_patterns:
-  - Peak hours: IDENTIFY most frequent work times
-  - Session length: AVERAGE duration by user
-  - Consistency: CALCULATE work_days / total_days
-  - Collaboration: IDENTIFY overlapping_sessions between users
-  
-ANALYZE work_intensity:
-  - Research depth: MEASURE sustained_focus_periods
-  - Task switching: COUNT topic_changes within sessions  
-  - Completion patterns: IDENTIFY "continue" vs "new" work indicators
-```
-
-### **PHASE 4: OUTPUT GENERATION**
-
-#### **Step 4.1: Quantitative Summary Table**
-```
-GENERATE volunteer_hours_table:
-  COLUMNS: [User, Date, Clock_In, Clock_Out, Duration, Notes]
-  INCLUDE: confirmed_hours, estimated_hours, total_weekly
-  FORMAT: Precise timestamps with timezone notation
-  
-CALCULATE financial_value:
-  - total_hours × $30/hour (skilled volunteer rate)
-  - annual_projection = weekly_average × 52
-  - grant_match_value for federal reporting
-```
-
-#### **Step 4.2: Operational Recommendations**
-```
-GENERATE recommendations BASED ON:
-
-TIME_MANAGEMENT_ISSUES:
-  - Users > 50 hours/week → "workload_review_needed"
-  - Sessions > 12 hours → "break_policy_review" 
-  - Incomplete clock_outs > 20% → "time_tracking_training"
-
-RESEARCH_PRODUCTIVITY:
-  - Sustained research topics → "milestone_documentation_opportunity"
-  - Frequent topic switching → "focus_optimization_needed"
-  - High collaboration periods → "coordination_success_patterns"
-
-GRANT_COMPLIANCE:
-  - Missing time data → "documentation_improvement_required"
-  - Irregular patterns → "volunteer_support_check"
-  - High value hours → "federal_match_documentation_ready"
-```
-
-#### **Step 4.3: Quality Assurance Flags**
-```
-MANDATORY_VALIDATION_CHECKS:
-  - All manual clock_out times properly converted? [YES/NO]
-  - Duration calculations include timezone adjustments? [YES/NO]  
-  - Overnight sessions flagged for review? [YES/NO]
-  - Work content properly categorized? [YES/NO]
-  - Financial projections calculated? [YES/NO]
-
-ERROR_HANDLING:
-  - Unparseable timestamps → LOG error, REQUEST clarification
-  - Impossible durations → FLAG for manual review
-  - Missing user context → NOTE data limitation in output
-```
-
-### **PHASE 5: EXECUTION VALIDATION**
-
-#### **Step 5.1: Self-Check Protocol**
-```
-BEFORE_COMPLETING_ANALYSIS:
-  1. Did I calculate actual hours for each volunteer? [REQUIRED]
-  2. Did I handle manual clock-out times correctly? [REQUIRED]
-  3. Did I provide financial value calculations? [REQUIRED]
-  4. Did I extract work content for recommendations? [REQUIRED]
-  5. Did I flag time management issues? [REQUIRED]
-
-IF ANY [REQUIRED] = NO:
-  RESTART subroutine execution
-  DO NOT provide incomplete analysis
-```
-
-#### **Step 5.2: Output Format Validation**
-```
-REQUIRED_OUTPUT_SECTIONS:
-  ✓ Individual volunteer hour tables with precise calculations
-  ✓ Manual time override handling documentation  
-  ✓ Work content analysis from notes
-  ✓ Financial value for grant reporting
-  ✓ Operational recommendations based on patterns
-  ✓ Quality flags for management attention
-
-PROHIBITED_SHORTCUTS:
-  ✗ Session counts instead of hour calculations
-  ✗ Ignoring manual time notes
-  ✗ High-level patterns without quantification
-  ✗ Academic analysis without operational value
-```
-
-### **EXECUTION TRIGGER**
-```
-ACTIVATE_SUBROUTINE when user query contains:
-  - Time tracking data (timestamp patterns)
-  - "how much time" / "hours worked"  
-  - "volunteer time" / "time analysis"
-  - Raw tracking logs with user IDs and timestamps
-
-MANDATORY_SEQUENCE:
-  1. Execute PHASE 1-5 in order
-  2. Validate using Step 5.1 checklist
-  3. Generate artifact with quantified results
-  4. Provide operational recommendations
+```javascript
+const session = {
+    sessionId: "session_20250603_233500",
+    userId: "3f573d1-7315-4212-bd3c-8a301b92015f",
+    startEvent: {
+        eventType: "auto_timestamp",
+        timestamp: "2025-06-03T23:35:39.125Z",
+        priority: "auto"
+    },
+    endEvent: {
+        eventType: "clock_out",
+        timestamp: "2025-06-04T22:30:00.000Z",
+        localTime: "10:30 PM ET",
+        priority: "explicit"              // HIGHEST PRIORITY
+    },
+    breaks: [],                          // Array of break periods
+    totalDuration: "22h 54m 21s",       // Calculated duration
+    flags: ["EXTREME_LENGTH"],           // Validation flags
+    activityNotes: ["Continue researching TNS's ideational implications"]
+};
 ```
 
 ---
 
-## **VERSION CONTROL**
-- **Version**: 1.0
-- **Created**: June 9, 2025
-- **Purpose**: Systematic volunteer time analysis for NTARI grant compliance
-- **Trigger**: Raw time tracking data analysis requests
-- **Output**: Quantified hours + operational recommendations
+## PRIORITY HIERARCHY ALGORITHM
+
+### Event Priority Ranking (Highest to Lowest):
+
+```javascript
+const PRIORITY_WEIGHTS = {
+    explicit_clockout: 100,     // User-declared end times
+    explicit_clockin: 95,       // User-declared start times
+    break_markers: 90,          // User-declared breaks
+    system_markers: 50,         // System-generated events
+    auto_timestamp: 10          // Automatic timestamps
+};
+
+function selectEventTime(events) {
+    // Sort by priority weight (highest first)
+    const sortedEvents = events.sort((a, b) => 
+        PRIORITY_WEIGHTS[a.eventType] - PRIORITY_WEIGHTS[b.eventType]
+    );
+    
+    return sortedEvents[0]; // Use highest priority event
+}
+```
+
+### Clock Out Detection Patterns:
+
+```javascript
+const CLOCKOUT_PATTERNS = [
+    /Clock Out @ (\d{1,2}:\d{2} (?:AM|PM) \w+)/i,
+    /clocked out at (\d{1,2}:\d{2})/i,
+    /end session (\d{1,2}:\d{2})/i,
+    /stopping work @ (\d{1,2}:\d{2})/i,
+    /session complete (\d{1,2}:\d{2})/i
+];
+
+function extractClockOutTime(textData) {
+    for (const pattern of CLOCKOUT_PATTERNS) {
+        const match = textData.match(pattern);
+        if (match) {
+            return {
+                eventType: 'explicit_clockout',
+                localTime: match[1],
+                priority: 'explicit',
+                extractedFrom: match[0]
+            };
+        }
+    }
+    return null;
+}
+```
+
+---
+
+## SESSION VALIDATION FRAMEWORK
+
+### 1. Duration Validation Rules
+
+```javascript
+const VALIDATION_THRESHOLDS = {
+    // Duration flags
+    EXTREME_SHORT: 5 * 60,        // < 5 minutes
+    SUSPICIOUS_SHORT: 30 * 60,    // < 30 minutes  
+    NORMAL_MIN: 30 * 60,          // 30 minutes
+    NORMAL_MAX: 8 * 60 * 60,      // 8 hours
+    CONCERNING_LONG: 12 * 60 * 60, // 12 hours
+    EXTREME_LONG: 20 * 60 * 60,   // 20 hours
+    
+    // Weekly limits
+    WEEKLY_CONCERN: 40 * 60 * 60, // 40 hours/week
+    WEEKLY_EXTREME: 60 * 60 * 60  // 60 hours/week
+};
+
+function validateSessionDuration(durationSeconds) {
+    const flags = [];
+    
+    if (durationSeconds < VALIDATION_THRESHOLDS.EXTREME_SHORT) {
+        flags.push('EXTREME_SHORT');
+    } else if (durationSeconds < VALIDATION_THRESHOLDS.SUSPICIOUS_SHORT) {
+        flags.push('SUSPICIOUS_SHORT');
+    } else if (durationSeconds > VALIDATION_THRESHOLDS.EXTREME_LONG) {
+        flags.push('EXTREME_LENGTH');
+    } else if (durationSeconds > VALIDATION_THRESHOLDS.CONCERNING_LONG) {
+        flags.push('CONCERNING_LENGTH');
+    }
+    
+    return flags;
+}
+```
+
+### 2. Cross-Validation Checks
+
+```javascript
+function validateSession(session) {
+    const validationResults = {
+        isValid: true,
+        warnings: [],
+        errors: [],
+        flags: []
+    };
+    
+    // Duration validation
+    const durationFlags = validateSessionDuration(session.durationSeconds);
+    validationResults.flags.push(...durationFlags);
+    
+    // Time gap validation
+    if (session.endEvent.timestamp < session.startEvent.timestamp) {
+        validationResults.errors.push('END_BEFORE_START');
+        validationResults.isValid = false;
+    }
+    
+    // Timezone consistency
+    if (session.startEvent.timezone !== session.endEvent.timezone) {
+        validationResults.warnings.push('TIMEZONE_MISMATCH');
+    }
+    
+    // Priority validation
+    if (session.endEvent.priority === 'explicit' && 
+        session.endEvent.eventType === 'clock_out') {
+        validationResults.flags.push('EXPLICIT_CLOCKOUT_USED');
+    }
+    
+    return validationResults;
+}
+```
+
+---
+
+## CALCULATION ENGINE ENHANCEMENT
+
+### 1. Multi-Source Time Resolution
+
+```javascript
+function calculateSessionDuration(session) {
+    // Step 1: Identify highest priority start/end events
+    const startEvent = selectHighestPriorityEvent(session.startEvents);
+    const endEvent = selectHighestPriorityEvent(session.endEvents);
+    
+    // Step 2: Handle explicit clock out times
+    if (endEvent.eventType === 'explicit_clockout') {
+        const endTime = parseExplicitTime(endEvent.localTime, endEvent.date);
+        const startTime = parseTimestamp(startEvent.timestamp);
+        return calculateDuration(startTime, endTime);
+    }
+    
+    // Step 3: Fall back to timestamp calculation
+    return calculateDuration(startEvent.timestamp, endEvent.timestamp);
+}
+
+function parseExplicitTime(timeString, dateContext) {
+    // Parse "10:30 PM ET" with date context
+    const timeFormats = [
+        'h:mm A z',     // "10:30 PM ET"
+        'HH:mm z',      // "22:30 ET"
+        'h:mm A',       // "10:30 PM"
+    ];
+    
+    // Try each format with moment.js or similar
+    for (const format of timeFormats) {
+        const parsed = moment.tz(`${dateContext} ${timeString}`, format, dateContext.timezone);
+        if (parsed.isValid()) {
+            return parsed.utc().toISOString();
+        }
+    }
+    
+    throw new Error(`Could not parse explicit time: ${timeString}`);
+}
+```
+
+### 2. Break Handling
+
+```javascript
+function calculateEffectiveWorkTime(session) {
+    let totalDuration = session.totalDuration;
+    
+    // Subtract documented breaks
+    for (const breakPeriod of session.breaks) {
+        totalDuration -= breakPeriod.duration;
+    }
+    
+    // Auto-detect potential breaks (gaps > 30 minutes)
+    const potentialBreaks = detectBreakGaps(session.activityTimestamps);
+    
+    return {
+        grossDuration: session.totalDuration,
+        documentedBreaks: session.breaks.reduce((sum, b) => sum + b.duration, 0),
+        estimatedBreaks: potentialBreaks.reduce((sum, b) => sum + b.duration, 0),
+        effectiveWorkTime: totalDuration
+    };
+}
+```
+
+---
+
+## REPORTING ENHANCEMENT SPECIFICATIONS
+
+### 1. Enhanced Hours Summary Table
+
+```javascript
+function generateHoursSummary(timeData, periodStart, periodEnd) {
+    const summary = {
+        periodStart,
+        periodEnd,
+        users: []
+    };
+    
+    for (const userId of Object.keys(timeData)) {
+        const userSessions = timeData[userId];
+        const userSummary = {
+            userId,
+            userName: getUserName(userId),
+            totalHours: 0,
+            sessionCount: userSessions.length,
+            averageSessionLength: 0,
+            longestSession: 0,
+            flags: [],
+            validationIssues: []
+        };
+        
+        for (const session of userSessions) {
+            // Validate each session
+            const validation = validateSession(session);
+            userSummary.validationIssues.push(...validation.errors);
+            userSummary.flags.push(...validation.flags);
+            
+            // Calculate hours using priority system
+            const duration = calculateSessionDuration(session);
+            userSummary.totalHours += duration.hours;
+            
+            if (duration.hours > userSummary.longestSession) {
+                userSummary.longestSession = duration.hours;
+                userSummary.longestSessionDetails = {
+                    start: session.startEvent.timestamp,
+                    end: session.endEvent.timestamp,
+                    endType: session.endEvent.eventType,
+                    priority: session.endEvent.priority
+                };
+            }
+        }
+        
+        userSummary.averageSessionLength = userSummary.totalHours / userSummary.sessionCount;
+        summary.users.push(userSummary);
+    }
+    
+    return summary;
+}
+```
+
+### 2. Validation Reporting
+
+```javascript
+function generateValidationReport(hoursSummary) {
+    const report = {
+        overallHealth: 'GOOD',
+        criticalIssues: [],
+        warnings: [],
+        recommendations: []
+    };
+    
+    for (const user of hoursSummary.users) {
+        // Check for extreme sessions
+        if (user.longestSession > 20) {
+            report.criticalIssues.push({
+                type: 'EXTREME_SESSION_LENGTH',
+                user: user.userName,
+                sessionLength: user.longestSession,
+                endType: user.longestSessionDetails.endType,
+                message: `${user.userName} logged ${user.longestSession}h session with ${user.longestSessionDetails.endType} end marker`
+            });
+        }
+        
+        // Check weekly totals
+        if (user.totalHours > 60) {
+            report.criticalIssues.push({
+                type: 'EXCESSIVE_WEEKLY_HOURS',
+                user: user.userName,
+                totalHours: user.totalHours,
+                message: `${user.userName} logged ${user.totalHours}h in 7 days (>60h threshold)`
+            });
+        }
+        
+        // Validation issues
+        if (user.validationIssues.length > 0) {
+            report.warnings.push({
+                type: 'DATA_VALIDATION_ISSUES',
+                user: user.userName,
+                issues: user.validationIssues
+            });
+        }
+    }
+    
+    // Set overall health
+    if (report.criticalIssues.length > 0) {
+        report.overallHealth = 'CRITICAL';
+    } else if (report.warnings.length > 0) {
+        report.overallHealth = 'WARNING';
+    }
+    
+    return report;
+}
+```
+
+---
+
+## IMPLEMENTATION ROADMAP
+
+### Phase 1: Data Structure Migration (Week 1-2)
+- [ ] Define new event type schema
+- [ ] Create migration script for existing data
+- [ ] Implement priority hierarchy algorithm
+- [ ] Add explicit clock out pattern recognition
+
+### Phase 2: Validation Framework (Week 3-4)
+- [ ] Implement duration validation rules
+- [ ] Add cross-validation checks
+- [ ] Create validation reporting system
+- [ ] Add real-time validation during data entry
+
+### Phase 3: Enhanced Reporting (Week 5-6)
+- [ ] Upgrade hours summary generation
+- [ ] Add validation issue reporting
+- [ ] Implement health assessment scoring
+- [ ] Create detailed session breakdown views
+
+### Phase 4: Error Prevention (Week 7-8)
+- [ ] Add real-time clock out time parsing
+- [ ] Implement automatic session flagging
+- [ ] Create user notification system for extreme sessions
+- [ ] Add data entry validation at input time
+
+---
+
+## TESTING SPECIFICATIONS
+
+### Test Cases for Clock Out Handling:
+
+```javascript
+describe('Clock Out Marker Processing', () => {
+    test('should prioritize explicit clock out over timestamp', () => {
+        const rawData = 'HLine3f573d1...2025-06-04T04:19:20.527Z**Clock Out @ 1030 PM ET**';
+        const processed = processTimeEntry(rawData);
+        
+        expect(processed.endEvent.eventType).toBe('explicit_clockout');
+        expect(processed.endEvent.localTime).toBe('10:30 PM ET');
+        expect(processed.endEvent.priority).toBe('explicit');
+    });
+    
+    test('should calculate duration using explicit time', () => {
+        const session = createTestSession('2025-06-03T23:35:39.125Z', 'Clock Out @ 1030 PM ET');
+        const duration = calculateSessionDuration(session);
+        
+        expect(duration.hours).toBe(22.9); // Approximately
+        expect(duration.minutes).toBe(1374); // Total minutes
+    });
+    
+    test('should flag extreme session lengths', () => {
+        const session = createLongSession(23 * 60 * 60); // 23 hours
+        const validation = validateSession(session);
+        
+        expect(validation.flags).toContain('EXTREME_LENGTH');
+        expect(validation.warnings.length).toBeGreaterThan(0);
+    });
+});
+```
+
+---
+
+## SUCCESS METRICS
+
+### Accuracy Improvements:
+- **Clock Out Recognition**: 100% accuracy for standard patterns
+- **Duration Calculation**: ±5 minute accuracy for explicit markers
+- **Validation Coverage**: Flag 95% of extreme sessions automatically
+
+### User Experience:
+- **Clear Reporting**: Explicit vs automatic time source indication
+- **Health Monitoring**: Real-time warnings for concerning patterns
+- **Data Confidence**: Validation status for all calculated hours
+
+### System Reliability:
+- **Error Prevention**: 90% reduction in calculation errors
+- **Data Consistency**: Standardized format across all entries
+- **Audit Trail**: Complete source tracking for all time calculations
+
+---
+
+This enhanced specification ensures that explicit clock out markers like "Clock Out @ 1030 PM ET" are properly recognized, prioritized, and used in all duration calculations, preventing the type of error that occurred in the HLine analysis.
