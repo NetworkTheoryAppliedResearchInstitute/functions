@@ -1,145 +1,376 @@
-# NODE.NEXUS SUBROUTINE EDIT PLAN
-**Critical Fix: Prevent Visible Error Labeling**
-*Date: June 10, 2025*
-
-## PROBLEM IDENTIFIED
-Current subroutine allows implementation where errors are visibly marked with [Error] labels, defeating the educational purpose of training critical thinking and error detection skills.
-
-## REQUIRED EDITS
-
-### **EDIT 1: Add Explicit Invisibility Requirement**
-**Location**: After "ESSENTIAL REQUIREMENTS" section  
-**Add New Subsection**:
-
-```markdown
-### **🚨 CRITICAL: ERROR INVISIBILITY REQUIREMENT**
-- ❌ **NEVER use visible error markers**: [Error], [Wrong], [Mistake], etc.
-- ❌ **NEVER highlight or bold erroneous content** in training articles
-- ❌ **NEVER use different formatting** for incorrect information
-- ✅ **Errors must read as normal educational content**
-- ✅ **Only the Answer Key reveals error locations**
-- ✅ **Training value depends on invisible integration**
-
-**Why This Matters**: The entire educational value depends on readers developing real-world error detection skills. Marking errors destroys the training effectiveness.
-```
-
-### **EDIT 2: Strengthen Step-by-Step Instructions**
-**Location**: STEP 3: CONTENT GENERATION  
-**Replace existing text with**:
-
-```markdown
-### **STEP 3: CONTENT GENERATION**
-- Apply age-appropriate parameters (length, vocabulary, complexity)
-- **Embed exactly 10 errors INVISIBLY within educational content**
-- **Critical: Errors must appear as legitimate information**
-- **No visible markers, labels, or formatting differences**
-- Maintain narrative flow and reading engagement
-- Track each error PRIVATELY for answer key development (not in article)
-```
-
-### **EDIT 3: Add Pre-Generation Checklist**
-**Location**: Before STEP 4: DUAL ARTIFACT CREATION  
-**Add New Step**:
-
-```markdown
-### **STEP 3.5: PRE-DELIVERY VERIFICATION**
-**Before creating artifacts, confirm**:
-- [ ] All 10 errors planned and ready to embed invisibly
-- [ ] No error will be marked, highlighted, or labeled in training article
-- [ ] Errors will read as normal educational content
-- [ ] Only Answer Key will reveal error locations
-- [ ] Article maintains seamless educational narrative
-```
-
-### **EDIT 4: Strengthen Quality Checklist**
-**Location**: QUALITY ASSURANCE CHECKLIST  
-**Modify first requirement**:
-
-```markdown
-### **ESSENTIAL REQUIREMENTS (ALL IMPLEMENTATIONS)**
-- [ ] **Subject and age collected** before content generation
-- [ ] **Exactly 10 errors embedded INVISIBLY** in training article
-- [ ] **NO VISIBLE ERROR MARKERS** ([Error], highlighting, etc.) in training article
-- [ ] **Errors read as legitimate content** maintaining narrative flow
-- [ ] **Error distribution** follows framework (1-2, 3-4, 3-4, 1-2)
-- [ ] **Age-appropriate content** matches cognitive parameters
-- [ ] **Answer key complete** with all 10 errors explained
-- [ ] **Both artifacts ready** for immediate educational use
-- [ ] **Community support** included in conclusion
-- [ ] **Advancement pathway** clearly described
-```
-
-### **EDIT 5: Add Examples Section**
-**Location**: After PRACTICAL EXAMPLES  
-**Add New Subsection**:
-
-```markdown
-### **❌ WRONG IMPLEMENTATION EXAMPLE**
-**DON'T DO THIS:**
-> "Scientists have discovered that plants grow faster when they get most of their water through their leaves instead of their roots. **[Error #3]**"
-
-**Why This Fails**: Visible error markers destroy the training value.
-
-### **✅ CORRECT IMPLEMENTATION EXAMPLE**
-**DO THIS:**
-**Training Article**: 
-> "Scientists have discovered that plants grow faster when they get most of their water through their leaves instead of their roots."
-
-**Answer Key**:
-> **Error #3**: "Scientists have discovered that plants grow faster when they get most of their water through their leaves instead of their roots."
-> **What's Wrong**: This is incorrect because plants primarily absorb water through their root systems.
-
-**Why This Works**: Reader must detect the error independently, developing real critical thinking skills.
-```
-
-### **EDIT 6: Add Failure Prevention Protocol**
-**Location**: TROUBLESHOOTING GUIDE  
-**Add at the top**:
-
-```markdown
-### **🚨 CRITICAL ERROR PREVENTION**
-
-**Problem**: "I marked errors with [Error] labels in the training article"
-**Solution**: RESTART - This destroys educational value. Regenerate training article with invisible error embedding only.
-
-**Problem**: "Errors seem too obvious/marked"
-**Solution**: Errors should be plausible misconceptions that require knowledge to detect, not obviously marked mistakes.
-
-**Problem**: "Not sure if errors are truly invisible"
-**Solution**: Read training article aloud - does anything sound like "this is obviously wrong"? If yes, embed more subtly.
-```
-
-### **EDIT 7: Add Final Implementation Safeguard**
-**Location**: ACTIVATION PROTOCOL  
-**Add before "System Status"**:
-
-```markdown
-### **🔒 FINAL SAFEGUARD PROTOCOL**
-**Before delivering any Node.Nexus content**:
-1. **Verify training article contains NO visible error markers**
-2. **Confirm errors read as legitimate educational content**  
-3. **Check that only Answer Key reveals error locations**
-4. **If ANY errors are visibly marked, REGENERATE the training article**
-
-**Remember**: The training value is 100% dependent on invisible error embedding.
-```
-
-## IMPLEMENTATION PRIORITY
-**Critical Priority**: Implement all edits immediately to prevent educational value destruction.
-
-## TESTING PROTOCOL
-After edits, test with sample generation to confirm:
-- [ ] Training articles contain no visible error markers
-- [ ] Errors read as plausible educational content
-- [ ] Answer keys properly identify and explain all errors
-- [ ] Educational flow remains intact
-
-## SUCCESS CRITERIA
-- Zero instances of visible error marking in training articles
-- Maintained educational engagement and narrative flow
-- Clear separation between training content and answer key revelation
-- Preserved critical thinking skill development objectives
+# NODE.NEXUS ARTICLE GENERATION SUBROUTINE (RESTRUCTURED)
+**Network Theory Applied Research Institute, Inc.**  
+*Systematic Error Detection Training Content Generator*
 
 ---
 
-*These edits ensure the Node.Nexus subroutine fulfills its educational mission by training real-world error detection skills rather than simple pattern recognition of marked content.*
+## DAEMON ACTIVATION PROTOCOL
+
+### CRITICAL: EXTRACT CORE REQUIREMENTS FIRST
+**Before any content generation, systematically extract and organize all requirements:**
+
+#### **CRITICAL REQUIREMENTS MATRIX**
+```
+ERROR SPECIFICATIONS:
+✓ Error Count: Exactly 10 (all age groups, no exceptions)
+✓ Distribution: Intro(1-2), Main1(3-4), Main2(3-4), Conclusion(1-2)
+✓ Dual Artifacts: Training article + Answer key (both required)
+
+AGE CALIBRATION PARAMETERS:
+✓ Ages 4-7: 50-300 words, simple sentences (4-9 words)
+✓ Ages 8-11: 300-800 words, moderate complexity (8-14 words)
+✓ Ages 12-14: 800-1,500 words, academic vocabulary
+✓ Ages 15-17: 1,200-2,500 words, sophisticated language
+✓ Ages 18-25: 1,500-4,000+ words, professional terminology
+✓ Ages 26+: 1,500-4,000+ words, expert-level discourse
+
+TEMPLATE FORMATS:
+✓ Exact template format loaded for selected age group
+✓ All 10 errors must use consistent template structure
+```
+
+**🔍 VERIFICATION CHECKPOINT 1:**
+- [ ] All requirements extracted and organized
+- [ ] Age-specific parameters identified  
+- [ ] Template format loaded for active reference
+- [ ] Subject area and age group confirmed
+
+**❌ STOP: Do not proceed until Checkpoint 1 complete**
+
+---
+
+## STEP 1: SYSTEMATIC ERROR PLANNING
+
+### ERROR DISTRIBUTION MAPPING
+**Plan all 10 errors before any content generation:**
+
+```
+INTRODUCTION SECTION:
+□ Error #1: [Specific concept/misconception]
+□ Error #2: [Specific concept/misconception]
+
+MAIN CONTENT SECTION 1:
+□ Error #3: [Specific concept/misconception]
+□ Error #4: [Specific concept/misconception]  
+□ Error #5: [Specific concept/misconception]
+
+MAIN CONTENT SECTION 2:
+□ Error #6: [Specific concept/misconception]
+□ Error #7: [Specific concept/misconception]
+□ Error #8: [Specific concept/misconception]
+
+CONCLUSION SECTION:
+□ Error #9: [Specific concept/misconception]
+□ Error #10: [Specific concept/misconception]
+```
+
+### AGE-SPECIFIC ERROR TYPES
+**Select appropriate error types for your age group:**
+
+- **Ages 4-7**: Process misconceptions, simple fact reversals
+- **Ages 8-11**: Logical reasoning errors, cause-effect confusion
+- **Ages 12-14**: Evidence evaluation errors, source credibility mistakes
+- **Ages 15-17**: Research literacy errors, methodology misconceptions
+- **Ages 18+**: Professional competency errors, expert-level misconceptions
+
+**🔍 VERIFICATION CHECKPOINT 2:**
+- [ ] Exactly 10 errors planned with concepts specified
+- [ ] Distribution follows required framework (1-2, 3-4, 3-4, 1-2)
+- [ ] Error types appropriate for selected age group
+- [ ] Error concepts clearly defined before content creation
+
+**❌ STOP: Do not proceed until Checkpoint 2 complete**
+
+---
+
+## STEP 2: GUIDED CONTENT GENERATION
+
+### SYSTEMATIC CONTENT CREATION PROTOCOL
+**Generate content with active error tracking:**
+
+#### **Introduction Section**
+1. Write introduction content
+2. **Embed Error #1** → Mark: ✓ Error #1 embedded
+3. **Embed Error #2** → Mark: ✓ Error #2 embedded
+4. Verify: Introduction has exactly 1-2 errors
+
+#### **Main Content Section 1**  
+1. Write main content section 1
+2. **Embed Error #3** → Mark: ✓ Error #3 embedded
+3. **Embed Error #4** → Mark: ✓ Error #4 embedded
+4. **Embed Error #5** → Mark: ✓ Error #5 embedded
+5. Verify: Main Content 1 has exactly 3-4 errors
+
+#### **Main Content Section 2**
+1. Write main content section 2  
+2. **Embed Error #6** → Mark: ✓ Error #6 embedded
+3. **Embed Error #7** → Mark: ✓ Error #7 embedded
+4. **Embed Error #8** → Mark: ✓ Error #8 embedded
+5. Verify: Main Content 2 has exactly 3-4 errors
+
+#### **Conclusion Section**
+1. Write conclusion content
+2. **Embed Error #9** → Mark: ✓ Error #9 embedded  
+3. **Embed Error #10** → Mark: ✓ Error #10 embedded
+4. Verify: Conclusion has exactly 1-2 errors
+
+### CONTENT QUALITY VERIFICATION
+```
+ACTIVE ERROR TRACKER:
+Planned: 10  |  Embedded: [Count as you go]  |  Remaining: [10 - Embedded]
+
+DISTRIBUTION TRACKER:
+Introduction: ___/2  |  Main1: ___/4  |  Main2: ___/4  |  Conclusion: ___/2
+```
+
+**🔍 VERIFICATION CHECKPOINT 3:**
+- [ ] All 10 errors embedded in planned locations
+- [ ] Content meets age-appropriate length parameters
+- [ ] Educational flow maintained despite error embedding
+- [ ] Error tracking shows exactly 10 embedded errors
+- [ ] Distribution matches framework requirements
+
+**❌ STOP: Do not proceed until Checkpoint 3 complete**
+
+---
+
+## STEP 3: TEMPLATE-DRIVEN ANSWER KEY
+
+### CONSOLIDATED TEMPLATE FORMATS
+
+#### **AGES 4-7 TEMPLATE**
+```
+**Error #[X]:** "[Quote exact wrong text from article]"
+**What's Wrong:** [Simple explanation in 1-2 sentences]
+**What's Right:** [Correct information in simple words]
+**Let's Think:** [Simple question to discuss]
+```
+
+#### **AGES 8-11 TEMPLATE**
+```
+**Error #[X]:** "[Quote exact wrong text from article]"
+**The Problem:** [Clear explanation of what's incorrect]
+**The Truth:** [Accurate information with explanation]
+**Think About It:** [Discussion question about the concept]
+```
+
+#### **AGES 12-14 TEMPLATE**
+```
+**Error #[X]:** "[Quote exact wrong text from article]"
+**Analysis Error:** [Explanation of the logical or factual error]
+**Correct Analysis:** [Proper reasoning and accurate information]
+**Critical Thinking:** [Question that develops analytical skills]
+```
+
+#### **AGES 15-17 TEMPLATE**
+```
+**Error #[X]:** "[Quote exact wrong text from article]"
+**Research Error:** [Detailed analysis of the methodological or factual error]
+**Proper Research:** [Correct methodology and accurate information with sources]
+**Advanced Application:** [Complex analytical question for deeper understanding]
+```
+
+#### **AGES 18+ TEMPLATE**
+```
+**Error #[X]:** "[Quote exact wrong text from article]"
+**Professional Error:** [Expert-level analysis of the error and its implications]
+**Expert Correction:** [Comprehensive correction with professional standards]
+**Verification Standards:** [How professionals would verify this information]
+**Advanced Application:** [Professional-level application question]
+```
+
+### SYSTEMATIC ANSWER KEY CREATION
+**Apply exact template format for all 10 errors:**
+
+```
+ERROR PROCESSING CHECKLIST:
+□ Error #1: Template applied, quoted exactly, explanation complete
+□ Error #2: Template applied, quoted exactly, explanation complete  
+□ Error #3: Template applied, quoted exactly, explanation complete
+□ Error #4: Template applied, quoted exactly, explanation complete
+□ Error #5: Template applied, quoted exactly, explanation complete
+□ Error #6: Template applied, quoted exactly, explanation complete
+□ Error #7: Template applied, quoted exactly, explanation complete
+□ Error #8: Template applied, quoted exactly, explanation complete
+□ Error #9: Template applied, quoted exactly, explanation complete
+□ Error #10: Template applied, quoted exactly, explanation complete
+```
+
+**🔍 VERIFICATION CHECKPOINT 4:**
+- [ ] All 10 errors addressed using exact template format
+- [ ] Every error quoted exactly from training article
+- [ ] Age-appropriate explanations and corrections provided
+- [ ] Discussion prompts included for all errors
+- [ ] Answer key ready for immediate educational use
+
+**❌ STOP: Do not proceed until Checkpoint 4 complete**
+
+---
+
+## STEP 4: FINAL QUALITY ASSURANCE
+
+### COMPREHENSIVE COMPLETION CHECKLIST
+```
+CRITICAL REQUIREMENTS VERIFICATION:
+□ Subject and age group collected and confirmed
+□ Exactly 10 errors embedded (count verified)
+□ Error distribution correct: Intro(1-2), Main1(3-4), Main2(3-4), Conclusion(1-2)
+□ Age-appropriate content length and complexity
+□ Educational flow maintained throughout article
+□ Answer key complete with all 10 errors addressed
+□ Template format applied consistently for all answers
+□ Both artifacts ready for immediate publication
+
+DUAL ARTIFACT VERIFICATION:
+□ Training Article: Complete, educational, errors embedded correctly
+□ Answer Key: Complete, all errors addressed, template format consistent
+
+EDUCATIONAL EFFECTIVENESS VERIFICATION:
+□ Content teaches while testing error detection skills
+□ Errors are subtle enough to require careful analysis  
+□ Corrections provide clear learning opportunities
+□ Discussion prompts support skill development
+```
+
+**🔍 VERIFICATION CHECKPOINT 5 (FINAL):**
+- [ ] All checklist items verified complete
+- [ ] Both artifacts ready for publication
+- [ ] Quality standards met for Node.Nexus training
+- [ ] Implementation follows specification exactly
+
+**✅ READY: Proceed to publication only after all checkpoints complete**
+
+---
+
+## COMPUTATIONAL VERIFICATION TOOLS
+
+### ERROR TRACKING SYSTEM
+```javascript
+// Real-time error tracking during implementation
+const errorTracker = {
+  planned: 10,
+  embedded: 0,
+  answered: 0,
+  distribution: {intro: 0, main1: 0, main2: 0, conclusion: 0},
+  
+  embedError: function(section) {
+    this.embedded++;
+    this.distribution[section]++;
+    console.log(`Error ${this.embedded} embedded in ${section}`);
+    console.log(`Remaining: ${this.planned - this.embedded}`);
+    return this.embedded <= 10;
+  },
+  
+  verifyDistribution: function() {
+    return (this.distribution.intro >= 1 && this.distribution.intro <= 2) &&
+           (this.distribution.main1 >= 3 && this.distribution.main1 <= 4) &&
+           (this.distribution.main2 >= 3 && this.distribution.main2 <= 4) &&
+           (this.distribution.conclusion >= 1 && this.distribution.conclusion <= 2);
+  }
+};
+```
+
+### TEMPLATE COMPLIANCE CHECKER
+```javascript
+// Verify answer key template compliance
+const templateChecker = {
+  templates: {
+    '4-7': ['Error #', 'What\'s Wrong:', 'What\'s Right:', 'Let\'s Think:'],
+    '8-11': ['Error #', 'The Problem:', 'The Truth:', 'Think About It:'],
+    '12-14': ['Error #', 'Analysis Error:', 'Correct Analysis:', 'Critical Thinking:'],
+    '15-17': ['Error #', 'Research Error:', 'Proper Research:', 'Advanced Application:'],
+    '18+': ['Error #', 'Professional Error:', 'Expert Correction:', 'Verification Standards:', 'Advanced Application:']
+  },
+  
+  verifyTemplate: function(answerKeyEntry, ageGroup) {
+    const required = this.templates[ageGroup];
+    return required.every(element => answerKeyEntry.includes(element));
+  }
+};
+```
+
+---
+
+## QUICK REFERENCE CARDS
+
+### **ERROR DISTRIBUTION CARD**
+```
+Introduction: 1-2 errors
+Main Content 1: 3-4 errors  
+Main Content 2: 3-4 errors
+Conclusion: 1-2 errors
+TOTAL: Exactly 10 errors
+```
+
+### **AGE PARAMETER CARD**
+```
+4-7: 50-300 words, simple (4-9 word sentences)
+8-11: 300-800 words, moderate (8-14 word sentences)
+12-14: 800-1,500 words, academic vocabulary
+15-17: 1,200-2,500 words, sophisticated language
+18-25: 1,500-4,000+ words, professional terms
+26+: 1,500-4,000+ words, expert discourse
+```
+
+### **TEMPLATE SELECTION CARD**
+```
+Ages 4-7: What's Wrong/What's Right format
+Ages 8-11: Problem/Truth format
+Ages 12-14: Analysis Error format
+Ages 15-17: Research Error format  
+Ages 18+: Professional Error format
+```
+
+---
+
+## EMERGENCY TROUBLESHOOTING
+
+### **CHECKPOINT FAILURE PROTOCOLS**
+
+**If Checkpoint 1 fails:**
+- Re-extract requirements systematically
+- Verify age group selection is specific
+- Confirm template format is loaded
+- Start over if requirements unclear
+
+**If Checkpoint 2 fails:**
+- Recount planned errors (must be exactly 10)
+- Verify distribution adds up correctly
+- Adjust error concepts if age-inappropriate
+- Complete planning before content generation
+
+**If Checkpoint 3 fails:**
+- Count embedded errors carefully
+- Check each content section for correct distribution
+- Re-embed missing errors in correct sections
+- Verify content length meets age parameters
+
+**If Checkpoint 4 fails:**
+- Apply exact template format for all errors
+- Quote exact text from training article
+- Add missing discussion prompts
+- Verify all 10 errors addressed
+
+**If Checkpoint 5 fails:**
+- Review entire checklist systematically
+- Fix any incomplete elements
+- Verify both artifacts are complete
+- Do not proceed to publication until all items checked
+
+---
+
+## SUCCESS INDICATORS
+
+### **Implementation Success Metrics**
+- ✅ All 5 verification checkpoints completed
+- ✅ Zero post-implementation rework required
+- ✅ Both artifacts ready for immediate publication
+- ✅ Educational effectiveness standards met
+
+### **Quality Assurance Validation**
+- ✅ Exactly 10 errors embedded and addressed
+- ✅ Age-appropriate content and complexity
+- ✅ Template format applied consistently
+- ✅ Error detection training effectiveness achieved
+
+**🎯 MISSION ACCOMPLISHED: Node.Nexus training content ready for publication**
